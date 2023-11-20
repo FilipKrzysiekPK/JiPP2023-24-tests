@@ -29,7 +29,7 @@ TEST(TheSame, char_char) {
     EXPECT_EQ('u', var.getChar());
 }
 
-TEST(TheSame, char_char) {
+TEST(TheSame, double_double) {
     Variable var;
 
     var.setDouble(3.1415);
