@@ -1,4 +1,4 @@
-#include "../Variable.h"
+#include "../src/Variable.h"
 #include <gtest/gtest.h>
 
 TEST(TheSame, int_int) {
