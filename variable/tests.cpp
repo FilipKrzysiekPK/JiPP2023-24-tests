@@ -46,3 +46,5 @@ TEST(NoConversion, oneTypeToSecond) {
 }
 
 // ---------------------------------------------
+
+//Test name: MemoryLeak*
