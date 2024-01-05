@@ -1,5 +1,7 @@
 #include "../src/Variable.h"
 #include <gtest/gtest.h>
+#include "windows.h"
+#include "psapi.h"
 
 TEST(TheSame, int_int) {
     Variable var;
@@ -46,5 +48,39 @@ TEST(NoConversion, oneTypeToSecond) {
 }
 
 // ---------------------------------------------
+
+// Memory usage
+
+SIZE_T getPhysicalMemoryUsage(PROCESS_MEMORY_COUNTERS &pmc) {
+    GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+    return pmc.WorkingSetSize;
+}
+
+TEST(Memory, testForMemoryLeak) {
+    PROCESS_MEMORY_COUNTERS pmc;
+    SIZE_T memoryBefore = getPhysicalMemoryUsage(pmc);
+    Variable varP;
+
+    for (int i = 0; i < 1000 * 100; ++i) {
+        Variable var;
+        var.setDouble(5.13);
+        var.setUnsigned(500);
+        var.getInt();
+        var.getUnsigned();
+        var.setInt();
+
+        varP.setDouble(5.13);
+        varP.setUnsigned(500);
+        varP.getInt();
+        varP.getUnsigned();
+        varP.setInt();
+
+        SIZE_T memoryUsage = getPhysicalMemoryUsage(pmc);
+        EXPECT_LT(memoryUsage, 100 * 1024 * 1024);
+    }
+
+    SIZE_T memoryUsage = getPhysicalMemoryUsage(pmc);
+    EXPECT_LT(memoryUsage - memoryBefore, 5 * 1024 * 1024);
+}
 
 //Test name: MemoryLeak*
