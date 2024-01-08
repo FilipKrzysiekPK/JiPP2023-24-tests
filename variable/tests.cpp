@@ -1,3 +1,5 @@
+#define _HAS_STD_BYTE 0
+
 #include "../src/Variable.h"
 #include <gtest/gtest.h>
 #include "windows.h"
@@ -67,13 +69,13 @@ TEST(Memory, testForMemoryLeak) {
         var.setUnsigned(500);
         var.getInt();
         var.getUnsigned();
-        var.setInt();
+        var.setInt(5);
 
         varP.setDouble(5.13);
         varP.setUnsigned(500);
         varP.getInt();
         varP.getUnsigned();
-        varP.setInt();
+        varP.setInt(5);
 
         SIZE_T memoryUsage = getPhysicalMemoryUsage(pmc);
         EXPECT_LT(memoryUsage, 100 * 1024 * 1024);
